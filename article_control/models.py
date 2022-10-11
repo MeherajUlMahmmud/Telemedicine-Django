@@ -27,9 +27,6 @@ class ArticleModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return self.article_title + " by " + self.article_author.name
-
     class Meta:
         verbose_name = 'Article'
         verbose_name_plural = 'Articles'

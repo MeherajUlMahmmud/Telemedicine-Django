@@ -22,6 +22,9 @@
                             </a>
                         </li>
                         <li class="list-inline-item"><span class="text-white">/</span></li>
+                        {% if "Post New" in task %}
+                        <li class="list-inline-item text-white-50">Post Article</li>
+                        {% endif %}
                         {% if "Update" in task %}
                         <li class="list-inline-item">
                             <a href="{% url 'article-details' article.slug %}" class="text-white">
@@ -29,8 +32,8 @@
                             </a>
                         </li>
                         <li class="list-inline-item"><span class="text-white">/</span></li>
-                        {% endif %}
                         <li class="list-inline-item text-white-50">Update Article</li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>

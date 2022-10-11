@@ -11,11 +11,10 @@ class ArticleModelAdmin(admin.ModelAdmin):
 	search_fields = ['title', 'content']
 	list_per_page = 10
 	ordering = ['-created_at']
-	filter_horizontal = ['author']
 	raw_id_fields = ['author']
 	date_hierarchy = 'created_at'
 	
 
 
 admin.site.register(ArticleCategoryModel, ArticleCategoryModelAdmin)
-admin.site.register(ArticleModel)
+admin.site.register(ArticleModel, ArticleModelAdmin)
