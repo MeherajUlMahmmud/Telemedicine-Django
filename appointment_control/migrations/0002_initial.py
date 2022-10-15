@@ -9,13 +9,18 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('ot_control', '0001_initial'),
+        ('appointment_control', '0001_initial'),
         ('user_control', '0001_initial'),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='otschedulemodel',
+            model_name='appointmentmodel',
+            name='doctor',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='user_control.doctormodel'),
+        ),
+        migrations.AddField(
+            model_name='appointmentmodel',
             name='patient',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='user_control.patientmodel'),
         ),

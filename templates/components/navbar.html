@@ -18,11 +18,11 @@
                 <li class="nav-item"><a class="nav-link" href="{% url 'article-home' %}">Articles</a></li>
                 {% if request.user.is_authenticated and request.user.is_doctor %}
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Appointments</a>
+                    <a class="nav-link" href="{% url 'doctor-appointment-home' %}">Appointments</a>
                 </li>
                 {% elif request.user.is_authenticated and request.user.is_patient %}
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Appointments</a>
+                    <a class="nav-link" href="{% url 'patient-appointment-home' %}">Appointments</a>
                 </li>
                 {% endif %}
 

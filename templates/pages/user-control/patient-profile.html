@@ -141,14 +141,6 @@
                             <h4><b>{{ community_posts|length }}</b>
                                 Community Post(s)
                             </h4>
-
-                            <h4><b>{{ total_blood_requests }}</b>
-                                Blood Request(s)
-                            </h4>
-
-                            <h4><b>{{ total_plasma_requests }}</b>
-                                Plasma Request(s)
-                            </h4>
                         </div>
                     </div>
                 </div>
@@ -178,17 +170,15 @@
 
                     <div class="info-block mt-4">
                         <span class="text-black text-capitalize mr-3">
-                            <i class="icofont-calendar mr-1"></i> {{ post.date_posted|date:"d N Y" }}
+                            <i class="icofont-calendar mr-1"></i> {{ post.created_at|date:"d N Y" }}
                         </span>
 
                         <p class="mb-1"><span class="h3">{{ post.title }}</span></p>
 
-                        <div class="text-center">
-                            <a class="btn btn-main btn-round-full my-3"
-                                href="{% url 'community-post-detail' post.slug %}">
-                                Read More <i class="icofont-simple-right ml-2"></i>
-                            </a>
-                        </div>
+                        <a class="btn btn-main btn-round-full my-3"
+                            href="{% url 'community-post-detail' post.slug %}">
+                            Read More <i class="icofont-simple-right ml-2"></i>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -203,103 +193,6 @@
         </div>
         {% endif %}
 
-        <hr />
-
-        <h3 class="my-3">Blood Requests</h3>
-
-        {% if not blood_requests %}
-        <h4 class="my-3">No activities yet</h4>
-        {% endif %}
-
-        <div class="row">
-            {% for post in blood_requests %}
-            <div class="col-lg-3 col-md-3 col-sm-4">
-                <div class="card p-3 rounded">
-                    <div class="single-blog-right">
-                        <div class="m-5">
-                            <p class="h2 text-center text-danger">{{ post.blood_group }}</p>
-
-                        </div>
-                        <div class="blog-author">
-                            <h4>For
-                                <span class="text-color-2">{{ post.patient_name }}
-                                    ({{ post.gender }})</span>
-                            </h4>
-                        </div>
-                        <div class="blog-content">
-                            <h4>Needed Within: {{ post.needed_within }}</h4>
-                            <p><strong class="strong">{{ post.quantity }} Unit(s)</strong> of
-                                <strong class="text-danger">{{ post.blood_group }}</strong>
-                                blood needed.
-                            </p>
-                            <p>Posted {{ post.posted_on|timesince }} ago</p>
-                            <div class="readmore_area">
-                                <a href="{% url 'blood-donation-request-detail' post.id %}"
-                                    data-hover="Read More"><span>Read More</span></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-
-        {% if total_blood_requests > 4 %}
-        <div>
-            <a href="#" class="btn btn-main-2 btn-round-full mt-3">
-                See More Posts <i class="fas fa-arrow-right"></i>
-            </a>
-        </div>
-        {% endif %}
-
-        <hr />
-
-        <h3 class="my-3">Plasma Requests</h3>
-
-        {% if not plasma_requests %}
-        <h4 class="my-3">No activities yet</h4>
-        {% endif %}
-
-        <div class="row">
-            {% for post in plasma_requests %}
-            <div class="col-lg-3 col-md-3 col-sm-4">
-                <div class="card p-3 rounded">
-                    <div class="single-blog-right">
-                        <div class="m-5">
-                            <p class="h2 text-center text-danger">{{ post.blood_group }}</p>
-
-                        </div>
-                        <div class="blog-author">
-                            <h4>For
-                                <span class="text-color-2">{{ post.patient_name }}
-                                    ({{ post.gender }})</span>
-                            </h4>
-                        </div>
-                        <div class="blog-content">
-                            <h4>Needed Within: {{ post.needed_within }}</h4>
-                            <p><strong class="strong">{{ post.quantity }} Unit(s)</strong> of
-                                <strong class="text-danger">{{ post.blood_group }}</strong>
-                                Plasma needed.
-                            </p>
-                            <p>Posted {{ post.posted_on|timesince }} ago</p>
-                            <div class="readmore_area">
-                                <a href="{% url 'plasma-donation-request-detail' post.id %}"
-                                    data-hover="Read More"><span>Read More</span></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-
-        {% if total_plasma_requests > 4 %}
-        <div>
-            <a href="#" class="btn btn-main-2 btn-round-full mt-3">
-                See More Posts <i class="fas fa-arrow-right"></i>
-            </a>
-        </div>
-        {% endif %}
     </div>
 </section>
 

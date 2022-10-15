@@ -4,7 +4,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.shortcuts import render, redirect
 
+from appointment_control.models import AppointmentModel
 from article_control.models import ArticleModel
+from patient_community_control.models import CommunityPostModel
 from user_control.decorators import *
 from user_control.forms import *
 from user_control.utils import calculate_age
@@ -151,18 +153,33 @@ def doctor_profile_view(request, pk):
         incomplete_profile = True
 
     articles = ArticleModel.objects.filter(author=user)[:4]
+    completed_appointments = AppointmentModel.objects.filter(
+        doctor=profile, is_complete=True
+    )
 
-
+    is_pending = False
+    if request.user.is_patient:
+        patient = PatientModel.objects.get(user=request.user)
+        appointments = AppointmentModel.objects.filter(
+            patient=patient,
+            doctor=profile,
+            is_accepted=False,
+            is_canceled=False,
+            is_complete=False,
+        )
+        if appointments.count() > 0:
+            is_pending = True
 
     context = {
         "user": user,
         "is_self": is_self,
         "profile": profile,
         "date_joined": date_joined,
+        "completed_appointments": completed_appointments.count(),
         "incomplete_profile": incomplete_profile,
         "articles": articles,
         "total_posts": articles.count(),
-        "is_pending": True,
+        "is_pending": is_pending,
     }
     return render(request, "pages/user-control/doctor-profile.html", context)
 
@@ -185,6 +202,11 @@ def patient_profile_view(request, pk):
     if profile.date_of_birth:
         age = calculate_age(profile.date_of_birth)
 
+    community_posts = CommunityPostModel.objects.filter(author=user)[:4]
+    completed_appointments = AppointmentModel.objects.filter(
+        patient=profile, is_complete=True
+    )
+
     incomplete_profile = False
     if (
         not profile.gender
@@ -205,6 +227,9 @@ def patient_profile_view(request, pk):
         "profile": profile,
         "date_joined": date_joined,
         "incomplete_profile": incomplete_profile,
+        "community_posts": community_posts,
+        "completed_appointments": completed_appointments.count(),
+        "total_posts": community_posts.count(),
     }
     return render(request, "pages/user-control/patient-profile.html", context)
 
