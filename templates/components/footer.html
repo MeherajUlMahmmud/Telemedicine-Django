@@ -5,7 +5,7 @@
             <div class="col-lg-4 mr-auto col-sm-6">
                 <div class="widget mb-5 mb-lg-0">
                     <div class="logo mb-4">
-                        <h2><img src="{% static 'images/logoo.png' %}" alt="" class="img-fluid">AMIC</h2>
+                        <h2><img src="{% static 'images/logoo.png' %}" alt="" class="img-fluid">Care & Cure</h2>
                     </div>
                     <p>Tempora dolorem voluptatum nam vero assumenda voluptate, facilis ad eos obcaecati tenetur
                         veritatis eveniet distinctio possimus.</p>
@@ -24,9 +24,9 @@
                     <div class="divider mb-4"></div>
 
                     <ul class="list-unstyled footer-menu lh-35">
-                        <li><a href="#">OT Schedule</a></li>
+                        <li><a href="{% url 'ot-booking-home' %}">OT Schedule</a></li>
                         <li><a href="#">Pathology Test</a></li>
-                        <li><a href="#">Patient Community</a></li>
+                        <li><a href="{% url 'community-home' %}">Patient Community</a></li>
                         <li><a href="#">Health Advisor</a></li>
                     </ul>
                 </div>
