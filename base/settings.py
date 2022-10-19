@@ -25,7 +25,7 @@ INSTALLED_APPS = [
     "article_control",
     "user_control",
     "patient_community_control",
-    # "medical_store_control",
+    "medical_store_control",
     # libraries
     "ckeditor",
     "django_filters",
