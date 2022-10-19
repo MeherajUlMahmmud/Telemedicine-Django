@@ -12,4 +12,7 @@ urlpatterns = [
 
     path('user/<str:pk>/', users_articles_view, name='users-articles'),
     path('category/<str:cat>/', category_articles_view, name='category-articles'),
+    path('like-article/<str:pk>/', like_article_view, name='like-article'),
+    path('unlike-article/<str:pk>/', unlike_article_view, name='unlike-article'),
+    path('comment-article/<str:pk>/', comment_article_view, name='comment-article'),
 ]

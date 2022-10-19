@@ -50,6 +50,14 @@
                                     <a href="{% url 'patient-profile' post.author.id %}" class="text-capitalize mr-3">
                                         <i class="fa fa-user mr-2"></i> {{ post.author.name }}
                                     </a>
+
+                                    <span class="text-black text-capitalize mr-3">
+                                        <i class="fa-solid fa-thumbs-up"></i> {{ post.totalLikeCount }}
+                                    </span>
+
+                                    <span class="text-black text-capitalize mr-3">
+                                        <i class="fa-solid fa-comment"></i> {{ post.totalCommentCount }}
+                                    </span>
                                 </div>
 
                                 <h2 class="mb-4 text-md">
@@ -58,6 +66,79 @@
 
                                 <p class="lead mb-4">{{ post.content|linebreaks }}</p>
 
+                                <hr/>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                {% if is_liked %}
+                                                <a href="{% url 'community-post-unlike' post.slug %}" class="btn btn-danger btn-block">
+                                                    <i class="fa-solid fa-thumbs-up"></i> Unlike
+                                                </a>
+                                                {% else %}
+                                                <a href="{% url 'community-post-like' post.slug %}" class="btn btn-primary btn-block">
+                                                    <i class="fa-solid fa-thumbs-up"></i> Like
+                                                </a>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr/>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <form action="{% url 'community-post-comment' post.slug %}" method="post">
+                                            {% csrf_token %}
+                                            <div class="form-group">
+                                                <label for="comment">Write a comment</label>
+                                                <textarea name="comment" id="comment" class="form-control" required rows="3"></textarea>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </form>
+
+                                        <hr/>
+                                        <h3>Comments</h3>
+                                        {% for comment in comments %}
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-md-2">
+                                                                {% if comment.author.image %}
+                                                                <img src="{{ comment.author.image.url }}" alt="{{ comment.author.name }}" class="img-fluid w-100">
+
+                                                                {% else %}
+                                                                <img src="{% static 'images/placeholders/user-placeholder.jpg' %}" alt="{{ comment.author.name }}"
+                                                                    class="img-fluid w-100">
+                                                                {% endif %}
+                                                            </div>
+                                                            <div class="col-md-10">
+                                                                <p>
+                                                                    <a class="float-left
+                                                                    {% if comment.author == request.user %}text-primary{% else %}text-dark{% endif %}"
+                                                                       {% if comment.author.is_patient %}
+                                                                          href="{% url 'patient-profile' comment.author.id %}"
+                                                                       {% elif comment.author.is_doctor %}
+                                                                          href="{% url 'doctor-profile' comment.author.id %}"
+                                                                       {% endif %}
+                                                                    ><strong>{{ comment.author.name }}</strong></a>
+                                                                </p>
+                                                                <div class="clearfix"></div>
+                                                                <p>{{ comment.comment }}</p>
+                                                                <small class="text-secondary">Posted on: {{ comment.created_at|date:"d N Y" }}</small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                {% endfor %}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

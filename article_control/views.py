@@ -41,6 +41,7 @@ def article_home_view(request):
 def article_details_view(request, slug):
     latest_articles = ArticleModel.objects.order_by("-created_at")[:3]
     article = ArticleModel.objects.get(slug=slug)
+    comments = ArticleCommentModel.objects.filter(article=article).order_by("-created_at")
 
     my_article = False
     if request.user == article.author:
@@ -49,15 +50,21 @@ def article_details_view(request, slug):
     author = UserModel.objects.get(id=article.author.id)
     author_profile = DoctorModel.objects.get(user=author)
 
+    is_liked = False
+    if request.user.is_authenticated:
+        is_liked = ArticleLikeModel.objects.filter(article=article, author=request.user).exists()
+
     categories = get_categories()
 
     context = {
         "article": article,
+        "comments": comments,
         "my_article": my_article,
         "latest_articles": latest_articles,
         "author": author,
         "author_profile": author_profile,
         "categories": categories,
+        "is_liked": is_liked,
     }
     return render(request, "pages/article/article-details.html", context)
 
@@ -189,3 +196,28 @@ def category_articles_view(request, cat):
         "categories": categories,
     }
     return render(request, "pages/article/category-article.html", context)
+
+
+def like_article_view(request, pk):
+    article = ArticleModel.objects.get(id=pk)
+    ArticleLikeModel.objects.create(article=article, author=request.user)
+    article.totalLikeCount += 1
+    article.save()
+    return redirect("article-details", article.slug)
+
+
+def unlike_article_view(request, pk):
+    article = ArticleModel.objects.get(id=pk)
+    ArticleLikeModel.objects.filter(article=article, author=request.user).delete()
+    article.totalLikeCount -= 1
+    article.save()
+    return redirect("article-details", article.slug)
+
+
+def comment_article_view(request, pk):
+    article = ArticleModel.objects.get(id=pk)
+    comment = request.POST.get("comment")
+    ArticleCommentModel.objects.create(article=article, author=request.user, comment=comment)
+    article.totalCommentCount += 1
+    article.save()
+    return redirect("article-details", article.slug)

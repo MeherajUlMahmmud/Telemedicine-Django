@@ -5,6 +5,7 @@ from django.utils.text import slugify
 
 from user_control.models import UserModel
 from .forms import *
+from .models import CommunityPostLikeModel, CommunityPostCommentModel
 
 
 @login_required(login_url="login")
@@ -62,6 +63,11 @@ def community_post_detail_view(request, slug):
     post = CommunityPostModel.objects.get(slug=slug)
     posts = CommunityPostModel.objects.all()[:3]
     author = UserModel.objects.get(id=post.author.id)
+    comments = CommunityPostCommentModel.objects.filter(post=post)
+
+    is_liked = False
+    if CommunityPostLikeModel.objects.filter(author=request.user, post=post).exists():
+        is_liked = True
 
     my_article = False
     if request.user == post.author:
@@ -71,6 +77,8 @@ def community_post_detail_view(request, slug):
         "post": post,
         "latest_posts": posts,
         "author": author,
+        "comments": comments,
+        "is_liked": is_liked,
         "my_article": my_article,
     }
     return render(
@@ -116,3 +124,29 @@ def community_post_delete_view(request, slug):
     return render(
         request, "pages/patient-community/community-delete-post.html", context
     )
+
+
+def community_post_like_view(request, slug):
+    post = CommunityPostModel.objects.get(slug=slug)
+    CommunityPostLikeModel.objects.create(author=request.user, post=post)
+    post.totalLikeCount += 1
+    post.save()
+    return redirect("community-post-detail", slug=post.slug)
+
+
+def community_post_unlike_view(request, slug):
+    post = CommunityPostModel.objects.get(slug=slug)
+    CommunityPostLikeModel.objects.filter(author=request.user, post=post).delete()
+    post.totalLikeCount -= 1
+    post.save()
+    return redirect("community-post-detail", slug=post.slug)
+
+
+def community_post_comment_view(request, slug):
+    post = CommunityPostModel.objects.get(slug=slug)
+    CommunityPostCommentModel.objects.create(
+        author=request.user, post=post, comment=request.POST["comment"]
+    )
+    post.totalCommentCount += 1
+    post.save()
+    return redirect("community-post-detail", post.slug)
