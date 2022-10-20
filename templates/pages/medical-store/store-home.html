@@ -46,11 +46,11 @@
 						<div class="blog-item">
 							<div class="blog-thumb">
 								{% if store.image %}
-								<img src="{{ store.image.url }}" alt="{{ post.title }}" class="img-fluid">
+								<img src="{{ store.image.url }}" alt="{{ post.title }}" class="img-fluid" style="height: 180px;">
 
 								{% else %}
 								<img src="{% static 'images/placeholders/article-image-placeholder.jpg' %}"
-									alt="{{ post.title }}" class="img-fluid">
+									alt="{{ post.title }}" class="img-fluid" style="height: 180px;">
 								{% endif %}
 							</div>
 

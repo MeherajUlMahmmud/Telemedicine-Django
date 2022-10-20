@@ -5,7 +5,7 @@ from medical_store_control.models import StoreModel
 
 
 def home_view(request):
-    stores = StoreModel.objects.all()
+    stores = StoreModel.objects.order_by("?")
 
     paginator = Paginator(stores, 5)
     page = request.GET.get("page", 1)

@@ -169,9 +169,24 @@
 
 
                     <div class="info-block mt-4">
-                        <span class="text-black text-capitalize mr-3">
-                            <i class="icofont-calendar mr-1"></i> {{ post.created_at|date:"d N Y" }}
-                        </span>
+
+                        <div class="blog-item-meta mb-3 mt-4">
+                            <span class="text-black text-capitalize mr-3">
+                                <i class="icofont-calendar mr-1"></i> {{ post.created_at|date:"d N Y" }}
+                            </span>
+
+                            <a href="{% url 'patient-profile' post.author.id %}" class="text-capitalize mr-3">
+                                <i class="fa fa-user mr-2"></i> {{ post.author.name }}
+                            </a>
+
+                            <span class="text-black text-capitalize mr-3">
+                                <i class="fa-solid fa-thumbs-up"></i> {{ post.totalLikeCount }}
+                            </span>
+
+                            <span class="text-black text-capitalize mr-3">
+                                <i class="fa-solid fa-comment"></i> {{ post.totalCommentCount }}
+                            </span>
+                        </div>
 
                         <p class="mb-1"><span class="h3">{{ post.title }}</span></p>
 
