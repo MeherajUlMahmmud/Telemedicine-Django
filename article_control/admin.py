@@ -16,7 +16,27 @@ class ArticleModelAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_at'
 
 
+class ArticleCommentModelAdmin(admin.ModelAdmin):
+    list_display = ['author', 'article', 'comment', 'created_at', 'updated_at']
+    list_filter = ['author', 'article']
+    search_fields = ['author', 'article']
+    list_per_page = 10
+    ordering = ['-created_at']
+    raw_id_fields = ['author', 'article']
+    date_hierarchy = 'created_at'
+
+
+class ArticleLikeModelAdmin(admin.ModelAdmin):
+    list_display = ['author', 'article', 'created_at', 'updated_at']
+    list_filter = ['author', 'article']
+    search_fields = ['author', 'article']
+    list_per_page = 10
+    ordering = ['-created_at']
+    raw_id_fields = ['author', 'article']
+    date_hierarchy = 'created_at'
+
+
 admin.site.register(ArticleCategoryModel, ArticleCategoryModelAdmin)
 admin.site.register(ArticleModel, ArticleModelAdmin)
-admin.site.register(ArticleLikeModel)
-admin.site.register(ArticleCommentModel)
+admin.site.register(ArticleLikeModel, ArticleLikeModelAdmin)
+admin.site.register(ArticleCommentModel, ArticleCommentModelAdmin)

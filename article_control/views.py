@@ -18,14 +18,14 @@ def article_home_view(request):
     if request.user.is_authenticated and request.user.is_doctor:
         is_doctor = True
 
-    paginator = Paginator(articles, 5)
-    page = request.GET.get("page", 1)
-    try:
-        articles = paginator.page(page)
-    except PageNotAnInteger:
-        articles = paginator.page(1)
-    except EmptyPage:
-        articles = paginator.page(paginator.num_pages)
+    # paginator = Paginator(articles, 5)
+    # page = request.GET.get("page", 1)
+    # try:
+    #     articles = paginator.page(page)
+    # except PageNotAnInteger:
+    #     articles = paginator.page(1)
+    # except EmptyPage:
+    #     articles = paginator.page(paginator.num_pages)
 
     categories = get_categories()
     context = {

@@ -2,6 +2,7 @@ from datetime import date
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.db import models
+
 from .constants import *
 
 
@@ -87,33 +88,33 @@ class PatientModel(models.Model):
         return self.user.name
 
     def calc_bmi(self):
-        bmi = self.weight / (self.height**2)
+        bmi = self.weight / (self.height ** 2)
         return round(bmi, 2)
 
     def calc_bmr(self):
         gender = self.gender
-        weight = self.weight # in kg
-        height = self.height * 100 # convert to cm
+        weight = self.weight  # in kg
+        height = self.height * 100  # convert to cm
         date_of_birth = self.date_of_birth
-        age = self.calc_age() # in years
-        bmr = 0 # Basal Metabolic Rate
+        age = self.calc_age()  # in years
+        bmr = 0  # Basal Metabolic Rate
         if gender and weight and height and date_of_birth:
             if gender == "Male":
-                bmr =  88.362 + (13.397 * float(weight)) + (4.799 * float(height)) - (5.677 * float(age)) 
+                bmr = 88.362 + (13.397 * float(weight)) + (4.799 * float(height)) - (5.677 * float(age))
             elif gender == "Female":
-                bmr =  447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age)
+                bmr = 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age)
 
         return round(bmr, 2)
 
     def calc_age(self):
         today = date.today()
         return (
-            today.year
-            - self.date_of_birth.year
-            - (
-                (today.month, today.day)
-                < (self.date_of_birth.month, self.date_of_birth.day)
-            )
+                today.year
+                - self.date_of_birth.year
+                - (
+                        (today.month, today.day)
+                        < (self.date_of_birth.month, self.date_of_birth.day)
+                )
         )
 
     class Meta:
@@ -148,6 +149,8 @@ class DoctorModel(models.Model):
     )
     BMDC_regNo = models.CharField(max_length=100, null=True, blank=True)
     last_donation = models.DateField(null=True, blank=True)
+    rating = models.DecimalField(decimal_places=2, max_digits=4, default=0.00,
+                                 null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -157,12 +160,12 @@ class DoctorModel(models.Model):
     def calc_age(self):
         today = date.today()
         return (
-            today.year
-            - self.date_of_birth.year
-            - (
-                (today.month, today.day)
-                < (self.date_of_birth.month, self.date_of_birth.day)
-            )
+                today.year
+                - self.date_of_birth.year
+                - (
+                        (today.month, today.day)
+                        < (self.date_of_birth.month, self.date_of_birth.day)
+                )
         )
 
     class Meta:

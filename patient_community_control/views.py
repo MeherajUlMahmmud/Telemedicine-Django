@@ -16,14 +16,14 @@ def community_home_view(request):
     if request.user.is_authenticated and request.user.is_patient:
         is_patient = True
 
-    paginator = Paginator(posts, 5)
-    page = request.GET.get("page", 1)
-    try:
-        posts = paginator.page(page)
-    except PageNotAnInteger:
-        posts = paginator.page(1)
-    except EmptyPage:
-        posts = paginator.page(paginator.num_pages)
+    # paginator = Paginator(posts, 5)
+    # page = request.GET.get("page", 1)
+    # try:
+    #     posts = paginator.page(page)
+    # except PageNotAnInteger:
+    #     posts = paginator.page(1)
+    # except EmptyPage:
+    #     posts = paginator.page(paginator.num_pages)
 
     context = {
         "posts": posts,

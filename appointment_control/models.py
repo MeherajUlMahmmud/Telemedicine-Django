@@ -1,6 +1,7 @@
 from django.db import models
 
 from user_control.models import PatientModel, DoctorModel
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 class AppointmentModel(models.Model):
@@ -18,7 +19,7 @@ class AppointmentModel(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.patient.user.name, "appointment with", self.doctor.user.name
+        return self.patient.user.name + "'s appointment with " + self.doctor.user.name
 
     class Meta:
         verbose_name = "Appointment"
@@ -34,8 +35,25 @@ class PrescriptionModel(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.appointment.patient.user.name, "prescription"
+        return self.appointment.patient.user.name + " prescription"
 
     class Meta:
         verbose_name = "Prescription"
         verbose_name_plural = "Prescriptions"
+
+
+class RatingModel(models.Model):
+    patient = models.ForeignKey(PatientModel, on_delete=models.CASCADE)
+    doctor = models.ForeignKey(DoctorModel, on_delete=models.CASCADE)
+    appointment = models.ForeignKey(AppointmentModel, on_delete=models.CASCADE)
+    rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+    comment = models.TextField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    # def __str__(self):
+    #     return self.patient.user.name + "rating for" + self.doctor.user.name
+
+    class Meta:
+        verbose_name = "Rating"
+        verbose_name_plural = "Ratings"

@@ -47,6 +47,11 @@
                         {% endif %}
 
                         {% if profile.blood_group %}
+                        <p class="h5">Rating:
+                            <span class="text-color-2">{{ profile.rating }} / 5.00</span>
+                        </p>{% endif %}
+
+                        {% if profile.blood_group %}
                         <p class="h5">Blood Group:
                             <span class="text-color-2">{{ profile.blood_group }}</span>
                         </p>{% endif %}
@@ -176,6 +181,44 @@
             </a>
         </div>
         {% endif %}
+
+        <hr />
+
+        <h3 class="my-3">Ratings and Reviews</h3>
+
+        {% if not ratings %}
+        <h4 class="my-3">No ratings yet</h4>
+        {% endif %}
+
+        {% for rating in ratings %}
+        <div class="blog-item my-3">
+            <h5 class="text-orange-2 text-color">
+                {% for i in '12345' %}
+                {% if forloop.counter <= rating.rating %}
+                <i class="fas fa-star"></i>
+                {% else %}
+                <i class="far fa-star"></i>
+                {% endif %}
+                {% endfor %}
+            </h5>
+
+            <p class="mb-2">
+                {{ rating.comment }}
+            </p>
+            <span class="" style="font-size: small" title="{{rating.created_at}}">
+                {{rating.created_at|timesince}} ago
+            </span>
+        </div>
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+        <a class="btn btn-main-2 btn-round-full mb-5 float-right"
+            href="{% url 'doctor-profile' user.id %}?page={{ page_obj.next_page_number }}">
+            Next
+            <i class="fa-solid fa-arrow-right mr-2"></i>
+        </a>
+        {% endif %}
+
     </div>
 </section>
 

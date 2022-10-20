@@ -7,15 +7,15 @@ from medical_store_control.models import StoreModel
 def home_view(request):
     stores = StoreModel.objects.order_by("?")
 
-    paginator = Paginator(stores, 5)
-    page = request.GET.get("page", 1)
-
-    try:
-        stores = paginator.page(page)
-    except PageNotAnInteger:
-        stores = paginator.page(1)
-    except EmptyPage:
-        stores = paginator.page(paginator.num_pages)
+    # paginator = Paginator(stores, 5)
+    # page = request.GET.get("page", 1)
+    #
+    # try:
+    #     stores = paginator.page(page)
+    # except PageNotAnInteger:
+    #     stores = paginator.page(1)
+    # except EmptyPage:
+    #     stores = paginator.page(paginator.num_pages)
 
     context = {
         "stores": stores

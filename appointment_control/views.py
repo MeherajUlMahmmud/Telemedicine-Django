@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from user_control.decorators import show_to_doctor, show_to_patient
 from user_control.utils import calculate_age
 from .forms import *
-from .models import AppointmentModel
+from .models import AppointmentModel, RatingModel
 from user_control.models import (
     UserModel,
     DoctorModel,
@@ -43,29 +43,29 @@ def doctor_appointment_home_view(request):
         appointment
         for appointment in appointments
         if appointment.is_accepted == False
-        and appointment.is_canceled == False
-        and appointment.is_complete == False
+           and appointment.is_canceled == False
+           and appointment.is_complete == False
     ]
     upcoming_appointments = [
         appointment
         for appointment in appointments
         if appointment.is_accepted == True
-        and appointment.is_canceled == False
-        and appointment.is_complete == False
+           and appointment.is_canceled == False
+           and appointment.is_complete == False
     ]
     rejected_appointments = [
         appointment
         for appointment in appointments
         if appointment.is_accepted == False
-        and appointment.is_canceled == True
-        and appointment.is_complete == False
+           and appointment.is_canceled == True
+           and appointment.is_complete == False
     ]
     completed_appointments = [
         appointment
         for appointment in appointments
         if appointment.is_accepted == True
-        and appointment.is_canceled == False
-        and appointment.is_complete == True
+           and appointment.is_canceled == False
+           and appointment.is_complete == True
     ]
 
     context = {
@@ -183,17 +183,17 @@ def appointment_detail_view(request, pk):
     appointment = AppointmentModel.objects.get(id=pk)
     is_pending = False
     if (
-        appointment.is_accepted == False
-        and appointment.is_canceled == False
-        and appointment.is_complete == False
+            appointment.is_accepted is False
+            and appointment.is_canceled is False
+            and appointment.is_complete is False
     ):
         is_pending = True
 
     is_upcoming = False
     if (
-        appointment.is_accepted == True
-        and appointment.is_canceled == False
-        and appointment.is_complete == False
+            appointment.is_accepted is True
+            and appointment.is_canceled is False
+            and appointment.is_complete is False
     ):
         is_upcoming = True
 
@@ -203,12 +203,21 @@ def appointment_detail_view(request, pk):
         is_complete = True
         prescription = PrescriptionModel.objects.get(appointment=appointment)
 
+    rating = None
+    rated = False
+    if appointment.is_complete and RatingModel.objects.filter(appointment=appointment).exists():
+        rated = True
+        rating = RatingModel.objects.get(appointment=appointment)
+
     context = {
+        "request_user": request.user,
         "appointment": appointment,
         "is_pending": is_pending,
         "is_complete": is_complete,
         "is_upcoming": is_upcoming,
         "prescription": prescription,
+        "rating": rating,
+        "rated": rated,
     }
     return render(request, "pages/appointment/appointment-details.html", context)
 
@@ -278,3 +287,24 @@ def appointment_doctor_list_view(request):
         "doctors": doctors,
     }
     return render(request, "pages/appointment/doctors-list.html", context)
+
+
+@login_required(login_url="login")
+def rate_doctor_view(request, pk):
+    appointment = AppointmentModel.objects.get(id=pk)
+    comment = request.POST.get("comment")
+    rating = int(request.POST.get("rating").strip())
+
+    RatingModel.objects.create(
+        patient=appointment.patient,
+        doctor=appointment.doctor,
+        appointment=appointment,
+        comment=comment,
+        rating=rating
+    )
+    doctor_ratings = RatingModel.objects.filter(doctor=appointment.doctor)
+    doctor_ratings_sum = sum([int(doctor_rating.rating) for doctor_rating in doctor_ratings])
+    doctor_avg_rating = doctor_ratings_sum / len(doctor_ratings)
+    appointment.doctor.rating = doctor_avg_rating
+    appointment.doctor.save()
+    return redirect("appointment-details", appointment.id)

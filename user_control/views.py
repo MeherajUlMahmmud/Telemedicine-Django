@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.shortcuts import render, redirect
 
-from appointment_control.models import AppointmentModel
+from appointment_control.models import AppointmentModel, RatingModel
 from article_control.models import ArticleModel
 from patient_community_control.models import CommunityPostModel
 from user_control.decorators import *
@@ -135,26 +135,26 @@ def doctor_profile_view(request, pk):
     if request.user == user:
         is_self = True
 
-    profile = DoctorModel.objects.get(user=user)
+    doctor_profile = DoctorModel.objects.get(user=user)
 
     date_joined = calculate_age(user.date_joined)
 
     incomplete_profile = False
     if (
-        not profile.bio
-        or not profile.gender
-        or not profile.blood_group
-        or not profile.date_of_birth
-        or not profile.phone
-        or not profile.NID
-        or not profile.specialization
-        or not profile.BMDC_regNo
+        not doctor_profile.bio
+        or not doctor_profile.gender
+        or not doctor_profile.blood_group
+        or not doctor_profile.date_of_birth
+        or not doctor_profile.phone
+        or not doctor_profile.NID
+        or not doctor_profile.specialization
+        or not doctor_profile.BMDC_regNo
     ):
         incomplete_profile = True
 
     articles = ArticleModel.objects.filter(author=user)[:4]
     completed_appointments = AppointmentModel.objects.filter(
-        doctor=profile, is_complete=True
+        doctor=doctor_profile, is_complete=True
     )
 
     is_pending = False
@@ -162,7 +162,7 @@ def doctor_profile_view(request, pk):
         patient = PatientModel.objects.get(user=request.user)
         appointments = AppointmentModel.objects.filter(
             patient=patient,
-            doctor=profile,
+            doctor=doctor_profile,
             is_accepted=False,
             is_canceled=False,
             is_complete=False,
@@ -170,16 +170,19 @@ def doctor_profile_view(request, pk):
         if appointments.count() > 0:
             is_pending = True
 
+    ratings = RatingModel.objects.filter(doctor=doctor_profile)
+
     context = {
         "user": user,
         "is_self": is_self,
-        "profile": profile,
+        "profile": doctor_profile,
         "date_joined": date_joined,
         "completed_appointments": completed_appointments.count(),
         "incomplete_profile": incomplete_profile,
         "articles": articles,
         "total_posts": articles.count(),
         "is_pending": is_pending,
+        "ratings": ratings,
     }
     return render(request, "pages/user-control/doctor-profile.html", context)
 
@@ -325,3 +328,5 @@ def account_settings_view(request):
         "password_form": password_form,
     }
     return render(request, "pages/user-control/account-settings.html", context)
+
+

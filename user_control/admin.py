@@ -94,8 +94,28 @@ class SpecializationModelAdmin(admin.ModelAdmin):
     date_hierarchy = "created_at"
 
 
+class FeedbackModelAdmin(admin.ModelAdmin):
+    list_display = (
+        "name",
+        "email",
+        "subject",
+        "message",
+        "created_at",
+        "updated_at",
+    )
+    search_fields = ["name"]
+    readonly_fields = (
+        "created_at",
+        "updated_at",
+    )
+    list_per_page = 30
+    ordering = ("created_at",)
+    list_filter = ("name",)
+    date_hierarchy = "created_at"
+
+
 admin.site.register(UserModel, UserModelAdmin)
 admin.site.register(DoctorModel, DoctorAdmin)
 admin.site.register(PatientModel, PatientAdmin)
 admin.site.register(SpecializationModel, SpecializationModelAdmin)
-admin.site.register(FeedbackModel)
+admin.site.register(FeedbackModel, FeedbackModelAdmin)
