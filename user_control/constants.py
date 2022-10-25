@@ -37,6 +37,16 @@ PAYMENT_METHOD_CHOICES = [  # A list of payment methods
     ("bKash", "bKash"),
     ("Nagad", "Nagad"),
 ]
+HISTORY_TYPE_CHOICES = [
+    ("", "Select History Type"),
+    ("X-Ray", "X-Ray"),
+    ("Blood Test", "Blood Test"),
+    ("Ultrasound", "Ultrasound"),
+    ("ECG", "ECG"),
+    ("MRI", "MRI"),
+    ("CT Scan", "CT Scan"),
+    ("Other", "Other"),
+]
 TYPES_CHOICES = [
     ("", "Select Ambulance Type"),
     ("Standard", "Standard"),

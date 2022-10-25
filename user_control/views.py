@@ -102,7 +102,7 @@ def patient_signup_view(request):
 
 
 @login_required(login_url="login")
-@show_to_doctor(allowed_roles=["is_doctor"])
+@show_to_doctor()
 def doctor_dashboard(request):
     user = request.user
     profile = DoctorModel.objects.get(user=user)
@@ -115,7 +115,7 @@ def doctor_dashboard(request):
 
 
 @login_required(login_url="login")
-@show_to_patient(allowed_roles=["is_patient"])
+@show_to_patient()
 def patient_dashboard(request):
     user = request.user
     profile = PatientModel.objects.get(user=user)

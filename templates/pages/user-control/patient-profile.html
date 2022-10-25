@@ -120,7 +120,7 @@
                         {% endif %}
 
                         {% if is_self and has_access %}
-                        <a href="#" class="btn btn-main btn-round-full m-3">
+                        <a href="{% url 'history-home' user.id %}" class="btn btn-main btn-round-full m-3">
                             <i class="fas fa-notes-medical"></i> Health Records
                         </a>
                         {% endif %}
@@ -133,7 +133,6 @@
                     <div class="divider my-4"></div>
                     <div class="row">
                         <div class="col-lg-12">
-                            <!--                            num_countries|pluralize:"y,ies"-->
                             <h4><b>{{ completed_appointments }}</b>
                                 Completed Appointment(s)
                             </h4>

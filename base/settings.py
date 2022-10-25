@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     "user_control",
     "patient_community_control",
     "medical_store_control",
+    "patient_history_control",
     # libraries
     "ckeditor",
     "django_filters",
@@ -185,3 +186,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "static/media")
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_HOST_USER = "careandcure810@gmail.com"
+EMAIL_HOST_PASSWORD = "multcqwxwxosywxp"
+EMAIL_USE_TLS = True

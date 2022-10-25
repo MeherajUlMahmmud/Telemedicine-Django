@@ -2,6 +2,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.utils.text import slugify
+from user_control.decorators import show_to_doctor, show_to_patient
 
 from user_control.models import UserModel
 from .forms import *
@@ -34,6 +35,7 @@ def community_home_view(request):
 
 
 @login_required(login_url="login")
+@show_to_patient()
 def community_post_create_view(request):
     task = "Create New"
     form = AddEditPostForm()
@@ -86,6 +88,8 @@ def community_post_detail_view(request, slug):
     )
 
 
+@login_required(login_url="login")
+@show_to_patient()
 def community_post_update_view(request, slug):
     task = "Update"
     post = CommunityPostModel.objects.get(slug=slug)
@@ -113,6 +117,8 @@ def community_post_update_view(request, slug):
     )
 
 
+@login_required(login_url="login")
+@show_to_patient()
 def community_post_delete_view(request, slug):
     post = CommunityPostModel.objects.get(slug=slug)
 
@@ -126,6 +132,7 @@ def community_post_delete_view(request, slug):
     )
 
 
+@login_required(login_url="login")
 def community_post_like_view(request, slug):
     post = CommunityPostModel.objects.get(slug=slug)
     CommunityPostLikeModel.objects.create(author=request.user, post=post)
@@ -134,6 +141,7 @@ def community_post_like_view(request, slug):
     return redirect("community-post-detail", slug=post.slug)
 
 
+@login_required(login_url="login")
 def community_post_unlike_view(request, slug):
     post = CommunityPostModel.objects.get(slug=slug)
     CommunityPostLikeModel.objects.filter(author=request.user, post=post).delete()
@@ -142,6 +150,7 @@ def community_post_unlike_view(request, slug):
     return redirect("community-post-detail", slug=post.slug)
 
 
+@login_required(login_url="login")
 def community_post_comment_view(request, slug):
     post = CommunityPostModel.objects.get(slug=slug)
     CommunityPostCommentModel.objects.create(

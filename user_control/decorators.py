@@ -14,7 +14,7 @@ def unauthenticated_user(view_func):
     return wrapper_func
 
 
-def show_to_doctor(allowed_roles=[]):
+def show_to_doctor():
     def decorator(view_func):
         def wrapper_func(request, *args, **kwargs):
             if request.user.is_doctor:
@@ -27,7 +27,7 @@ def show_to_doctor(allowed_roles=[]):
     return decorator
 
 
-def show_to_patient(allowed_roles=[]):
+def show_to_patient():
     def decorator(view_func):
         def wrapper_func(request, *args, **kwargs):
             if request.user.is_patient:

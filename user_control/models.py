@@ -149,8 +149,7 @@ class DoctorModel(models.Model):
     )
     BMDC_regNo = models.CharField(max_length=100, null=True, blank=True)
     last_donation = models.DateField(null=True, blank=True)
-    rating = models.DecimalField(decimal_places=2, max_digits=4, default=0.00,
-                                 null=True, blank=True)
+    rating = models.DecimalField(decimal_places=2, max_digits=4, default=0.00)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
