@@ -23,9 +23,9 @@ class ArticleModel(models.Model):
     content = models.TextField()
     image = models.ImageField(upload_to="images/article/", null=True, blank=True)
     slug = models.SlugField(unique=True, null=True, blank=True)
-    totalViewCount = models.IntegerField(default=0)
-    totalLikeCount = models.IntegerField(default=0)
-    totalCommentCount = models.IntegerField(default=0)
+    totalViewCount = models.IntegerField(default=0, null=True, blank=True)
+    totalLikeCount = models.IntegerField(default=0, null=True, blank=True)
+    totalCommentCount = models.IntegerField(default=0, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
