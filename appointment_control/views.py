@@ -1,3 +1,7 @@
+from django.conf import Settings
+from django.core.mail import send_mail
+from django.template import loader
+from django.template.loader import get_template
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
@@ -16,7 +20,7 @@ from .utils import filter_appointment_list, render_to_pdf
 
 
 @login_required(login_url="login")
-@show_to_patient(allowed_roles=["is_patient"])
+@show_to_patient()
 def patient_appointment_home_view(request):
     user = request.user
     patient = PatientModel.objects.get(user=user)
@@ -33,7 +37,7 @@ def patient_appointment_home_view(request):
 
 
 @login_required(login_url="login")
-@show_to_doctor(allowed_roles=["is_doctor"])
+@show_to_doctor()
 def doctor_appointment_home_view(request):
     user = request.user
     doctor = DoctorModel.objects.get(user=user)
@@ -78,7 +82,7 @@ def doctor_appointment_home_view(request):
 
 
 @login_required(login_url="login")
-@show_to_patient(allowed_roles=["is_patient"])
+@show_to_patient()
 def make_appointment_view(request, pk):
     doctor = DoctorModel.objects.get(user=UserModel.objects.get(id=pk))
     patient = PatientModel.objects.get(user=request.user)
@@ -110,7 +114,7 @@ def make_appointment_view(request, pk):
 
 
 @login_required(login_url="login")
-@show_to_patient(allowed_roles=["is_patient"])
+@show_to_patient()
 def patient_appointment_update_view(request, pk):
     appointment = AppointmentModel.objects.get(id=pk)
     form = PatientAppointmentForm(instance=appointment)
@@ -128,7 +132,7 @@ def patient_appointment_update_view(request, pk):
 
 
 @login_required(login_url="login")
-@show_to_doctor(allowed_roles=["is_doctor"])
+@show_to_doctor()
 def doctor_appointment_update_view(request, pk):
     appointment = AppointmentModel.objects.get(id=pk)
     form = DoctorAppointmentForm(instance=appointment)
@@ -148,7 +152,7 @@ def doctor_appointment_update_view(request, pk):
 
 
 @login_required(login_url="login")
-@show_to_patient(allowed_roles=["is_patient"])
+@show_to_patient()
 def appointment_delete_view(request, pk):
     appointment = AppointmentModel.objects.get(id=pk)
 
@@ -163,7 +167,7 @@ def appointment_delete_view(request, pk):
 
 
 @login_required(login_url="login")
-@show_to_doctor(allowed_roles=["is_doctor"])
+@show_to_doctor()
 def appointment_reject_view(request, pk):
     appointment = AppointmentModel.objects.get(id=pk)
 
@@ -223,7 +227,7 @@ def appointment_detail_view(request, pk):
 
 
 @login_required(login_url="login")
-@show_to_doctor(allowed_roles=["is_doctor"])
+@show_to_doctor()
 def write_prescription_view(request, pk):
     appointment = AppointmentModel.objects.get(id=pk)
 
@@ -254,6 +258,31 @@ def write_prescription_view(request, pk):
     return render(request, "pages/appointment/write-prescription.html", context)
 
 
+
+@login_required(login_url="login")
+def email_prescription_view(request, pk):
+    prescription = PrescriptionModel.objects.get(id=pk)
+    appointment = prescription.appointment
+    doctor = appointment.doctor
+    patient = appointment.patient
+    
+    subject = "Care and Cure - Prescription"
+    email_from = "careandcure810@gmail.com"
+    recipient_list = [patient.user.email]
+
+    context = {
+        "patient": patient,
+        "doctor": doctor,
+        "appointment": appointment,
+        "prescription": prescription,
+    }
+    msg_plain = loader.render_to_string('email-templates/prescription/prescription.txt', context)
+    msg_html = loader.render_to_string('email-templates/prescription/prescription.html', context)
+
+    send_mail(subject, msg_plain, email_from, recipient_list, fail_silently=True, html_message=msg_html)
+    return redirect("appointment-details", appointment.id)
+
+
 @login_required(login_url="login")
 def pdf_view(request, pk):
     appointment = AppointmentModel.objects.get(id=pk)
@@ -276,7 +305,7 @@ def pdf_view(request, pk):
 
 
 @login_required(login_url="login")
-@show_to_patient(allowed_roles=["is_patient"])
+@show_to_patient()
 def appointment_doctor_list_view(request):
     specializations = SpecializationModel.objects.all()
     doctors = DoctorModel.objects.all()

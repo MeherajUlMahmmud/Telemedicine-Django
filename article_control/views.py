@@ -70,7 +70,7 @@ def article_details_view(request, slug):
 
 
 @login_required(login_url="login")
-@show_to_doctor(allowed_roles=["is_doctor"])
+@show_to_doctor()
 def post_article_view(request):
     task = "Post New"
     form = ArticleForm()
@@ -99,7 +99,7 @@ def post_article_view(request):
 
 
 @login_required(login_url="login")
-@show_to_doctor(allowed_roles=["is_doctor"])
+@show_to_doctor()
 def edit_article_view(request, slug):
     task = "Update"
     article = ArticleModel.objects.get(slug=slug)
@@ -124,7 +124,7 @@ def edit_article_view(request, slug):
 
 
 @login_required(login_url="login")
-@show_to_doctor(allowed_roles=["is_doctor"])
+@show_to_doctor()
 def delete_article_view(request, slug):
     article = ArticleModel.objects.get(slug=slug)
     if request.method == "POST":
@@ -198,6 +198,7 @@ def category_articles_view(request, cat):
     return render(request, "pages/article/category-article.html", context)
 
 
+@login_required(login_url="login")
 def like_article_view(request, pk):
     article = ArticleModel.objects.get(id=pk)
     ArticleLikeModel.objects.create(article=article, author=request.user)
@@ -206,6 +207,7 @@ def like_article_view(request, pk):
     return redirect("article-details", article.slug)
 
 
+@login_required(login_url="login")
 def unlike_article_view(request, pk):
     article = ArticleModel.objects.get(id=pk)
     ArticleLikeModel.objects.filter(article=article, author=request.user).delete()
@@ -214,6 +216,7 @@ def unlike_article_view(request, pk):
     return redirect("article-details", article.slug)
 
 
+@login_required(login_url="login")
 def comment_article_view(request, pk):
     article = ArticleModel.objects.get(id=pk)
     comment = request.POST.get("comment")
