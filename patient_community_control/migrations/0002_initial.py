@@ -10,39 +10,34 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('article_control', '0001_initial'),
+        ('patient_community_control', '0001_initial'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='articlemodel',
+            model_name='communitypostmodel',
             name='author',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
-            model_name='articlemodel',
-            name='category',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='article_control.articlecategorymodel'),
-        ),
-        migrations.AddField(
-            model_name='articlelikemodel',
-            name='article',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='article_control.articlemodel'),
-        ),
-        migrations.AddField(
-            model_name='articlelikemodel',
+            model_name='communitypostlikemodel',
             name='author',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
-            model_name='articlecommentmodel',
-            name='article',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='article_control.articlemodel'),
+            model_name='communitypostlikemodel',
+            name='post',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='patient_community_control.communitypostmodel'),
         ),
         migrations.AddField(
-            model_name='articlecommentmodel',
+            model_name='communitypostcommentmodel',
             name='author',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+        ),
+        migrations.AddField(
+            model_name='communitypostcommentmodel',
+            name='post',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='patient_community_control.communitypostmodel'),
         ),
     ]
