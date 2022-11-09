@@ -84,11 +84,12 @@ class DoctorEditProfileForm(ModelForm):
         error_messages={"invalid": "Image files only"},
         widget=forms.FileInput,
     )
-    gender = forms.CharField(widget=forms.Select(choices=GENDER_CHOICES))
-    blood_group = forms.CharField(widget=forms.Select(choices=BLOOD_GROUP_CHOICES))
+    gender = forms.CharField(required=False, widget=forms.Select(choices=GENDER_CHOICES))
+    blood_group = forms.CharField(required=False, widget=forms.Select(choices=BLOOD_GROUP_CHOICES))
     date_of_birth = forms.DateField(
         required=False, widget=forms.DateInput(attrs={"type": "date"})
     )
+    phone = forms.CharField(required=False, widget=forms.TextInput(attrs={"placeholder": "Phone Number"}))
     last_donation = forms.DateField(
         required=False, widget=forms.DateInput(attrs={"type": "date"})
     )
@@ -96,7 +97,7 @@ class DoctorEditProfileForm(ModelForm):
     class Meta:
         model = DoctorModel
         fields = "__all__"
-        exclude = ["user", "created_at", "updated_at"]
+        exclude = ["user", "rating", "created_at", "updated_at"]
 
 
 class PatientEditProfileForm(ModelForm):

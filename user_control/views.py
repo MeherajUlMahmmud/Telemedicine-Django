@@ -249,7 +249,9 @@ def doctor_edit_profile(request):
             form.save()
             return redirect("doctor-profile", user.id)
         else:
-            return redirect("edit-profile")
+            # print errors
+            print(form.errors)
+            return redirect("doctor-edit-profile")
 
     context = {
         "form": form,
