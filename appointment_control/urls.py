@@ -16,6 +16,6 @@ urlpatterns = [
     path('write-prescription/<int:pk>', views.write_prescription_view, name='write-prescription'),
     path('email-prescription/<str:pk>', views.email_prescription_view, name='email-prescription'),
     path('download-prescription/<str:pk>', views.pdf_view, name='pdf-view'),
-    path('send-email/<int:pk>', views.rate_doctor_view, name='send-follow-up-email'),
+    path('send-email/<int:pk>', views.send_email_view, name='send-follow-up-email'),
     path('rate-doctor/<int:pk>', views.rate_doctor_view, name='rate-doctor'),
 ]

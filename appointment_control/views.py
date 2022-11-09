@@ -319,6 +319,30 @@ def appointment_doctor_list_view(request):
 
 
 @login_required(login_url="login")
+def send_email_view(request, pk):
+    appointment = AppointmentModel.objects.get(id=pk)
+    doctor = appointment.doctor
+    patient = appointment.patient
+    message = request.POST.get("message")
+    print(message)
+    subject = "Care and Cure - Appointment Follow Up"
+    email_from = doctor.user.email
+    recipient_list = [patient.user.email]
+
+    context = {
+        "appointment": appointment,
+        "doctor": doctor,
+        "patient": patient,
+        "message": message,
+    }
+    msg_plain = loader.render_to_string('email-templates/follow-up/follow-up.txt', context)
+    msg_html = loader.render_to_string('email-templates/follow-up/follow-up.html', context)
+
+    send_mail(subject, msg_plain, email_from, recipient_list, fail_silently=True, html_message=msg_html)
+    return redirect("appointment-details", appointment.id)
+
+
+@login_required(login_url="login")
 def rate_doctor_view(request, pk):
     appointment = AppointmentModel.objects.get(id=pk)
     comment = request.POST.get("comment")
