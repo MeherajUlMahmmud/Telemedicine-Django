@@ -138,7 +138,8 @@
                     <div class="info-block mt-4">
 
                         <div class="blog-item-meta mb-3 mt-4">
-                            <a href="{% url 'category-articles' article.category %}" class="text-color-2 text-capitalize mr-3">
+                            <a href="{% url 'category-articles' article.category %}"
+                                class="text-color-2 text-capitalize mr-3">
                                 <i class="icofont-book-mark mr-2"></i> {{ article.category }}
                             </a>
 
@@ -184,6 +185,31 @@
 
         <hr />
 
+        <h3 class="">Completed Appointments</h3>
+
+        {% if not completed_appointment_list %}
+        <h3 class="mx-3">No Completed Appointments</h3>
+        {% endif %}
+
+        <div class="row">
+            {% for appointment in completed_appointment_list %}
+            <div class="col-lg-4">
+                <div class="card rounded border p-3">
+                    <h4>Patient: <span class="text-color-2">
+                            {{ appointment.patient.user.name }}
+                        </span>
+                    </h4>
+                    <h5>Date <span class="text-color-2">{{ appointment.date }}</span></h5>
+                    <a href="{% url 'history-home' appointment.patient.user.id %}" class="btn btn-main my-2">View
+                        Patient's
+                        History</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <hr />
+
         <h3 class="my-3">Ratings and Reviews</h3>
 
         {% if not ratings %}
@@ -194,12 +220,11 @@
         <div class="blog-item my-3">
             <h5 class="text-orange-2 text-color">
                 {% for i in '12345' %}
-                {% if forloop.counter <= rating.rating %}
-                <i class="fas fa-star"></i>
-                {% else %}
-                <i class="far fa-star"></i>
-                {% endif %}
-                {% endfor %}
+                {% if forloop.counter <= rating.rating %} <i class="fas fa-star"></i>
+                    {% else %}
+                    <i class="far fa-star"></i>
+                    {% endif %}
+                    {% endfor %}
             </h5>
 
             <p class="mb-2">
