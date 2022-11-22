@@ -11,8 +11,6 @@ from .models import HistoryModel
 def history_home_view(request, pk):
     request_user = UserModel.objects.get(id=request.user.id)
     user = UserModel.objects.get(id=pk)
-    if request_user != user:
-        return render(request, '401.html')
     patient = PatientModel.objects.get(user=user)
     records = HistoryModel.objects.filter(user=patient)
 
