@@ -177,6 +177,7 @@ def doctor_profile_view(request, pk):
         "is_self": is_self,
         "profile": doctor_profile,
         "date_joined": date_joined,
+        "completed_appointment_list": completed_appointments,
         "completed_appointments": completed_appointments.count(),
         "incomplete_profile": incomplete_profile,
         "articles": articles,
