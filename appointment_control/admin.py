@@ -62,3 +62,4 @@ class RatingModelAdmin(admin.ModelAdmin):
 admin.site.register(AppointmentModel, AppointmentModelAdmin)
 admin.site.register(PrescriptionModel, PrescriptionModelAdmin)
 admin.site.register(RatingModel, RatingModelAdmin)
+admin.site.register(PaymentModel)

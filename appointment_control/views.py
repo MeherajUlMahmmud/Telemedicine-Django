@@ -90,12 +90,25 @@ def make_appointment_view(request, pk):
     form = PatientAppointmentForm()
     if request.method == "POST":
         form = PatientAppointmentForm(request.POST)
+        payment_method = request.POST.get("payment_method")
+        amount = request.POST.get("amount")
+        sent_number = request.POST.get("sent_number")
+        trx_id = request.POST.get("trx_id")
+        print(payment_method, sent_number, trx_id)
         if form.is_valid():
+            print(form.cleaned_data)
             new_appointment = form.save(commit=False)
             new_appointment.patient = patient
             new_appointment.doctor = doctor
             new_appointment.department = doctor.specialization
             new_appointment.save()
+            PaymentModel.objects.create(
+                appointment=new_appointment,
+                amount=amount,
+                payment_method=payment_method,
+                phone_number=sent_number,
+                transaction_id=trx_id,
+            )
             return redirect("appointment-details", new_appointment.id)
         else:
             context = {
@@ -185,6 +198,7 @@ def appointment_reject_view(request, pk):
 @login_required(login_url="login")
 def appointment_detail_view(request, pk):
     appointment = AppointmentModel.objects.get(id=pk)
+    payment = PaymentModel.objects.get(appointment=appointment)
     is_pending = False
     if (
             appointment.is_accepted is False
@@ -216,6 +230,7 @@ def appointment_detail_view(request, pk):
     context = {
         "request_user": request.user,
         "appointment": appointment,
+        "payment": payment,
         "is_pending": is_pending,
         "is_complete": is_complete,
         "is_upcoming": is_upcoming,

@@ -32,10 +32,17 @@
                     <span class="text-success">Completed</span>
                     {% endif %}
                 </h2>
+                <hr />
             </div>
         </div>
         <div class="row">
             <div class="col-lg-6">
+                <h3>Payment Details</h3>
+                <h4>
+                    BDT <span class="text-color-2">{{ payment.amount }}</span class="text-color-2"> was paid to <span class="text-color-2">{{ payment.phone_number }}</span> via <span class="text-color-2">{{ payment.payment_method }}</span class="text-color-2"> on <span class="text-color-2">{{ payment.created_at }}</span>
+                </h4>
+                <hr />
+                <h3>Appointment Details</h3>
                 <h3>Doctor:
                     <a href="{% url 'doctor-profile' appointment.doctor.user.id %}" class="text-color-2">
                         {{ appointment.doctor.user.name }}
