@@ -1,3 +1,4 @@
+import pickle
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -141,14 +142,14 @@ def doctor_profile_view(request, pk):
 
     incomplete_profile = False
     if (
-        not doctor_profile.bio
-        or not doctor_profile.gender
-        or not doctor_profile.blood_group
-        or not doctor_profile.date_of_birth
-        or not doctor_profile.phone
-        or not doctor_profile.NID
-        or not doctor_profile.specialization
-        or not doctor_profile.BMDC_regNo
+            not doctor_profile.bio
+            or not doctor_profile.gender
+            or not doctor_profile.blood_group
+            or not doctor_profile.date_of_birth
+            or not doctor_profile.phone
+            or not doctor_profile.NID
+            or not doctor_profile.specialization
+            or not doctor_profile.BMDC_regNo
     ):
         incomplete_profile = True
 
@@ -213,13 +214,13 @@ def patient_profile_view(request, pk):
 
     incomplete_profile = False
     if (
-        not profile.gender
-        or not profile.blood_group
-        or not profile.date_of_birth
-        or not profile.phone
-        or not profile.height
-        or not profile.weight
-        or not profile.address
+            not profile.gender
+            or not profile.blood_group
+            or not profile.date_of_birth
+            or not profile.phone
+            or not profile.height
+            or not profile.weight
+            or not profile.address
     ):
         incomplete_profile = True
 
@@ -333,3 +334,121 @@ def account_settings_view(request):
     return render(request, "pages/user-control/account-settings.html", context)
 
 
+ALL_ZEROS = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+SYMPTOM_LIST = ['itching', 'skin_rash', 'nodal_skin_eruptions', 'continuous_sneezing', 'shivering', 'chills',
+                'joint_pain', 'stomach_pain', 'acidity', 'ulcers_on_tongue', 'muscle_wasting', 'vomiting',
+                'burning_micturition', 'spotting_urination', 'fatigue', 'weight_gain', 'anxiety',
+                'cold_hands_and_feets', 'mood_swings', 'weight_loss', 'restlessness', 'lethargy', 'patches_in_throat',
+                'irregular_sugar_level', 'cough', 'high_fever', 'sunken_eyes', 'breathlessness', 'sweating',
+                'dehydration', 'indigestion', 'headache', 'yellowish_skin', 'dark_urine', 'nausea', 'loss_of_appetite',
+                'pain_behind_the_eyes', 'back_pain', 'constipation', 'abdominal_pain', 'diarrhoea', 'mild_fever',
+                'yellow_urine', 'yellowing_of_eyes', 'acute_liver_failure', 'fluid_overload', 'swelling_of_stomach',
+                'swelled_lymph_nodes', 'malaise', 'blurred_and_distorted_vision', 'phlegm', 'throat_irritation',
+                'redness_of_eyes', 'sinus_pressure', 'runny_nose', 'congestion', 'chest_pain', 'weakness_in_limbs',
+                'fast_heart_rate', 'pain_during_bowel_movements', 'pain_in_anal_region', 'bloody_stool',
+                'irritation_in_anus', 'neck_pain', 'dizziness', 'cramps', 'bruising', 'obesity', 'swollen_legs',
+                'swollen_blood_vessels', 'puffy_face_and_eyes', 'enlarged_thyroid', 'brittle_nails',
+                'swollen_extremeties', 'excessive_hunger', 'extra_marital_contacts', 'drying_and_tingling_lips',
+                'slurred_speech', 'knee_pain', 'hip_joint_pain', 'muscle_weakness', 'stiff_neck', 'swelling_joints',
+                'movement_stiffness', 'spinning_movements', 'loss_of_balance', 'unsteadiness',
+                'weakness_of_one_body_side', 'loss_of_smell', 'bladder_discomfort', 'foul_smell_of urine',
+                'continuous_feel_of_urine', 'passage_of_gases', 'internal_itching', 'toxic_look_(typhos)', 'depression',
+                'irritability', 'muscle_pain', 'altered_sensorium', 'red_spots_over_body', 'belly_pain',
+                'abnormal_menstruation', 'dischromic_patches', 'watering_from_eyes', 'increased_appetite', 'polyuria',
+                'family_history', 'mucoid_sputum', 'rusty_sputum', 'lack_of_concentration', 'visual_disturbances',
+                'receiving_blood_transfusion', 'receiving_unsterile_injections', 'coma', 'stomach_bleeding',
+                'distention_of_abdomen', 'history_of_alcohol_consumption', 'fluid_overload', 'blood_in_sputum',
+                'prominent_veins_on_calf', 'palpitations', 'painful_walking', 'pus_filled_pimples', 'blackheads',
+                'scurring', 'skin_peeling', 'silver_like_dusting', 'small_dents_in_nails', 'inflammatory_nails',
+                'blister', 'red_sore_around_nose', 'yellow_crust_ooze']
+DISEASES = {
+    'Fungal Infection': 15,
+    'Allergy': 4,
+    'GERD': 16,
+    'Chronic Cholestasis': 9,
+    'Drug Reaction': 14,
+    'Peptic Ulcer Disease': 33,
+    'AIDS': 1,
+    'Diabetes ': 12,
+    'Gastroenteritis': 17,
+    'Bronchial Asthma': 6,
+    'Hypertension ': 23,
+    'Migraine': 30,
+    'Cervical Spondylosis': 7,
+    'Paralysis (brain hemorrhage)': 32,
+    'Jaundice': 28,
+    'Malaria': 29,
+    'Chicken pox': 8,
+    'Dengue': 11,
+    'Typhoid': 37,
+    'hepatitis A': 40,
+    'Hepatitis B': 19,
+    'Hepatitis C': 20,
+    'Hepatitis D': 21,
+    'Hepatitis E': 22,
+    'Alcoholic hepatitis': 3,
+    'Tuberculosis': 36,
+    'Common Cold': 10,
+    'Pneumonia': 34,
+    'Dimorphic hemmorhoids(piles)': 13,
+    'Heart attack': 18,
+    'Varicose veins': 39,
+    'Hypothyroidism': 26,
+    'Hyperthyroidism': 24,
+    'Hypoglycemia': 25,
+    'Osteoarthristis': 31,
+    'Arthritis': 5,
+    '(vertigo) Paroymsal  Positional Vertigo': 0,
+    'Acne': 2,
+    'Urinary tract infection': 38,
+    'Psoriasis': 35,
+    'Impetigo': 27,
+}
+asdf = [15, 4, 16, 9, 14, 33, 1, 12, 17, 6, 23, 30, 7, 32, 28, 29, 8,
+        11, 37, 40, 19, 20, 21, 22, 3, 36, 10, 34, 13, 18, 39, 26, 24, 25,
+        31, 5, 0, 2, 38, 35, 27]
+
+
+def disease_prediction_view(request):
+    form = DiseasePredictionForm()
+
+    if request.method == "POST":
+        form = DiseasePredictionForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            print(data)
+            loaded_model = pickle.load(open("user_control/disease_prediction_model.sav", "rb"))
+            inputs = []
+            for k, v in data.items():
+                inputs.append(v)
+
+            print(inputs)
+            for i in range(0, len(SYMPTOM_LIST)):
+                for j in inputs:
+                    if j == SYMPTOM_LIST[i]:
+                        ALL_ZEROS[i] = 1
+
+            input_test = ALL_ZEROS
+
+            predict = loaded_model.predict([input_test])
+            predicted = predict[0]
+            print(predicted)
+
+            # check in DISEASES dict and get the key
+            disease = [k for k, v in DISEASES.items() if v == predicted]
+            
+            context = {
+                "form": form,
+                "disease": disease
+            }
+
+            return render(request, "pages/utils/disease-prediction.html", context)
+
+    context = {
+        "form": form,
+    }
+
+    return render(request, "pages/utils/disease-prediction.html", context)
