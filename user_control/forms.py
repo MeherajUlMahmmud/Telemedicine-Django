@@ -134,3 +134,12 @@ class AccountInformationForm(ModelForm):
     class Meta:
         model = UserModel
         fields = ("name", "email")
+
+
+class DiseasePredictionForm(forms.Form):
+    symptom1 = forms.CharField(required=True, widget=forms.Select(choices=DISEASE_SYMPTOM_CHOICES))
+    symptom2 = forms.CharField(required=True, widget=forms.Select(choices=DISEASE_SYMPTOM_CHOICES))
+    symptom3 = forms.CharField(required=True, widget=forms.Select(choices=DISEASE_SYMPTOM_CHOICES))
+    symptom4 = forms.CharField(required=True, widget=forms.Select(choices=DISEASE_SYMPTOM_CHOICES))
+    symptom5 = forms.CharField(required=True, widget=forms.Select(choices=DISEASE_SYMPTOM_CHOICES))
+    symptom6 = forms.CharField(required=True, widget=forms.Select(choices=DISEASE_SYMPTOM_CHOICES))
