@@ -2,7 +2,9 @@
 <nav class="navbar navbar-expand-lg navigation" id="navbar">
     <div class="container">
         <a class="navbar-brand" href="{% url 'home' %}">
-            <h1><img src="{% static 'images/logoo.png' %}" alt="" class="img-fluid">Care & Cure</h1>
+            <h1><img src="{% static 'images/logoo.png' %}" style="height: 50px;" alt="" class="img-fluid">&nbsp;Care &
+                Cure
+            </h1>
         </a>
 
         <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarmain"
@@ -15,7 +17,7 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="{% url 'home' %}">Home</a>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'article-home' %}">Articles</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'article-home' %}">Blog</a></li>
                 {% if request.user.is_authenticated and request.user.is_doctor %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'doctor-appointment-home' %}">Appointments</a>
@@ -28,6 +30,18 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'appointment-doctors-list' %}">Doctors</a>
                 </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'medical-store-home' %}">Find Pharmacy</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'disease-prediction' %}">Predict Disease</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}">Log In</a>
+                </li>
+
 
                 {% if request.user.is_authenticated %}
                 <li class="nav-item dropdown">
@@ -54,10 +68,8 @@
                 {% else %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="dropdown05" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">Get Started <i class="icofont-thin-down"></i></a>
+                        aria-haspopup="true" aria-expanded="false">Sign Up <i class="icofont-thin-down"></i></a>
                     <ul class="dropdown-menu" aria-labelledby="dropdown05">
-                        <li><a class="dropdown-item" href="{% url 'login' %}">
-                                <i class="fas fa-sign-in-alt"></i> Log In</a></li>
                         <li><a class="dropdown-item" href="{% url 'doctor-register' %}">
                                 <i class="fas fa-user-md"></i> Doctor Sign Up</a></li>
                         <li><a class="dropdown-item" href="{% url 'patient-register' %}">

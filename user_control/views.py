@@ -283,6 +283,15 @@ def patient_edit_profile(request):
     return render(request, "pages/user-control/edit-profile.html", context)
 
 
+def terms_view(request):
+    return render(request, "pages/utils/terms.html")
+
+def privacy_view(request):
+    return render(request, "pages/utils/privacy.html")
+
+def about_view(request):
+    return render(request, "pages/utils/about.html")
+
 def contact_view(request):
     if request.method == "POST":
         name = request.POST["name"]

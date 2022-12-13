@@ -5,10 +5,11 @@
             <div class="col-lg-4 mr-auto col-sm-6">
                 <div class="widget mb-5 mb-lg-0">
                     <div class="logo mb-4">
-                        <h2><img src="{% static 'images/logoo.png' %}" alt="" class="img-fluid">Care & Cure</h2>
+                        <h2><img src="{% static 'images/logoo.png' %}" style="height: 50px;" alt="logo"
+                                class="img-fluid">&nbsp;Care & Cure</h2>
                     </div>
-                    <p>Tempora dolorem voluptatum nam vero assumenda voluptate, facilis ad eos obcaecati tenetur
-                        veritatis eveniet distinctio possimus.</p>
+                    <p>The technology to connect, the expertise doctor you can trust,
+                        and the power to improve health.</p>
 
                     <ul class="list-inline footer-socials mt-4">
                         <li class="list-inline-item"><a href="#"><i class="icofont-facebook"></i></a></li>
@@ -26,7 +27,6 @@
                     <ul class="list-unstyled footer-menu lh-35">
                         <li><a href="{% url 'community-home' %}">Patient Community</a></li>
                         <li><a href="{% url 'appointment-doctors-list' %}">Doctors</a></li>
-                        <li><a href="{% url 'medical-store-home' %}">Find a Store</a></li>
                         <li><a href="{% url 'disease-prediction' %}">Disease Prediction</a></li>
                     </ul>
                 </div>
@@ -38,10 +38,9 @@
                     <div class="divider mb-4"></div>
 
                     <ul class="list-unstyled footer-menu lh-35">
-                        <li><a href="#">Terms & Conditions</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Company Support </a></li>
-                        <li><a href="#">FAQ</a></li>
+                        <li><a href="{% url 'terms' %}">Terms & Conditions</a></li>
+                        <li><a href="{% url 'privacy' %}">Privacy Policy</a></li>
+                        <li><a href="{% url 'about' %}">About Us </a></li>
                     </ul>
                 </div>
             </div>

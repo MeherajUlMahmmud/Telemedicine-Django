@@ -17,5 +17,8 @@ urlpatterns = [
     path("update-patient-profile", patient_edit_profile, name="patient-edit-profile"),
     path("auth/account-settings", account_settings_view, name="account-settings"),
     path("disease-prediction", disease_prediction_view, name="disease-prediction"),
+    path("terms-and-conditions", terms_view, name="terms"),
+    path("privacy-policy", privacy_view, name="privacy"),
+    path("about-us", about_view, name="about"),
     path("contact-us", contact_view, name="contact"),
 ]

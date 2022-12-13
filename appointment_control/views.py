@@ -319,8 +319,6 @@ def pdf_view(request, pk):
     return HttpResponse(pdf, content_type="application/pdf")
 
 
-@login_required(login_url="login")
-@show_to_patient()
 def appointment_doctor_list_view(request):
     specializations = SpecializationModel.objects.all()
     doctors = DoctorModel.objects.all()
